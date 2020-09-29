@@ -1,2 +1,2 @@
 # PomodoroApp
-Simple application which helps in concentration, work and study
+Simple application which helps in concentration, work and study.
