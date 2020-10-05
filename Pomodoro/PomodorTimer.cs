@@ -2,45 +2,48 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
+using System.Windows.Media.TextFormatting;
 using System.Windows.Threading;
+using Cerebri;
 
 namespace Pomodoro {
     public class PomodoroTimer {
         public PomodoroTimer() {
-            
+            CreateDispatcher();
         }
 
-        public delegate void OnCountDownEndedEventHandler(object source, EventArgs args);
-        public event OnCountDownEndedEventHandler CountDownEnded;
+        public event EventHandler OnCountDownEnded;
+        public event EventHandler<TickEventArgs> OnTick;
+
         private DispatcherTimer _timer;
-        private TimeSpan _time;
+        private TimeSpan _time = TimeSpan.FromMinutes(25);
 
-        protected virtual void OnCountDownEnded() {
-            CountDownEnded?.Invoke(this, EventArgs.Empty);
-        }
-
-        
-        private void CountDown(object sender, RoutedEventArgs e) {
-            
-            _time = TimeSpan.FromSeconds(5);
-            _timer = new DispatcherTimer(new TimeSpan(0, 0, 1), DispatcherPriority.Normal, Callback , Application.Current.Dispatcher);
-
+        public void Start() {
             _timer.Start();
-            
         }
-        private void Callback(object? sender, EventArgs e) {
-            Time.Text = _time.ToString("c");
-            
+
+        public void Stop() {
+            _timer.Stop();
+        }
+
+        public void SetTime(TimeSpan time) {
+            _time = time;
+        }
+
+        private void CreateDispatcher() {
+            _timer = new DispatcherTimer(new TimeSpan(0, 0, 1), DispatcherPriority.Normal, DispatcherTick,
+                Application.Current.Dispatcher);
+        }
+
+        private void DispatcherTick(object sender, EventArgs e) {
+            OnTick?.Invoke(this, new TickEventArgs() { TimeToEnd = _time });
             if (_time == TimeSpan.Zero) {
-                _timer.Stop();
-                OnCountDownEnded();
+                Stop();
+                OnCountDownEnded?.Invoke(this, EventArgs.Empty);
+                return;
             }
-            PomodoroTimer pomodoroTimer = new PomodoroTimer();
-            pomodoroTimer.OnCountDownEnded += (o, args) => { StartButton.IsEnabled = true;};
 
             _time = _time.Add(TimeSpan.FromSeconds(-1));
         }
-        
     }
-    
 }

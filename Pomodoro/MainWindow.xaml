@@ -11,12 +11,14 @@
         <StackPanel>
             <!-- Time -->
             <Grid>
-                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions> 
 
-                <TextBlock x:Name="Time" Text="00:25:00" HorizontalAlignment="Center" FontSize="60" />
-                <TextBlock x:Name="PomodoroNumber" Text="0/4" HorizontalAlignment="Center"/>
-
-             </Grid>      
+                <TextBlock x:Name="Time" Text="00:25:00" HorizontalAlignment="Center" FontSize="60" Grid.Row="0"/>
+                <TextBlock x:Name="PomodoroNumber" Text="Sesja: 0/4" HorizontalAlignment="Center" Grid.Row="1"/>
+            </Grid>
 
                 <!-- Tasks -->
             <!-- TODO -->
@@ -41,7 +43,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="StartButton" Click="CountDown" Content="Start!" Grid.Column="1"  FontSize="20"  Margin="0 30 "/>
+                <Button x:Name="StartButton" Click="CreateCountDown" Content="Start!" Grid.Column="1"  FontSize="20"  Margin="0 30 "/>
             </Grid>
         </StackPanel>
     </Border>
