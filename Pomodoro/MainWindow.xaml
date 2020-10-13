@@ -16,9 +16,13 @@
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 
-				<TextBlock x:Name="Time" Text="00:25:00" HorizontalAlignment="Center" FontSize="60" Grid.Row="0" />
+				<TextBlock x:Name="TimeTextBlock" HorizontalAlignment="Center" FontSize="60" Grid.Row="0" >
+                    <TextBlock.Text>
+                        <Binding StringFormat="00:{0}:00" Path="Time"></Binding>
+                    </TextBlock.Text>
+                </TextBlock>
 
-
+                    
 				<TextBlock x:Name="PomodoroNumberTextBlock" HorizontalAlignment="Center" Grid.Row="1">
 					<TextBlock.Text>
                         <Binding StringFormat="Sesja: {0}/4" Path="PomodoroNumber"></Binding>

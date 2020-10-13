@@ -33,27 +33,68 @@ namespace Cerebri {
 				}
 			}
 		}
+        public int Time {
+            get { return _time; }
+            set {
+                if (value != _time) {
+                    _time = value;
+                    OnPropertyChanged(nameof(Time));
+                }
+            }
+        }
 
-		private PomodoroTimer timer;
-		private int _pomodoroNumber = 10;
-
+        private PomodoroTimer timer;
+		private int _pomodoroNumber = 1;
+        private int _time = 25;
+        private PomodoroState _nextPomodoroState = PomodoroState.Focus;
+        private PomodoroState _pomodoroState = PomodoroState.None;
 		public MainWindow() {
 			InitializeComponent();
 			this.DataContext = this;
 		}
 
-
 		private void CreateCountDown(object sender, RoutedEventArgs e) {
-			timer = new PomodoroTimer();
-			timer.SetTime(TimeSpan.FromSeconds(5));
-			timer.Start();
-			StartButton.IsEnabled = false;
-			timer.OnTick += (o, args) => Time.Text = args.TimeToEnd.ToString("c");
-			timer.OnCountDownEnded += (o, args) => { StartButton.IsEnabled = true; };
-			timer.OnCountDownEnded += CountPomodoro;
-		}
+            switch (_pomodoroState) {
+                case PomodoroState.None:
+                    _pomodoroState = PomodoroState.Focus;
+                    CreatePomodoro(PomodoroDuration.Durations[PomodoroState.Focus]);
+                    timer.OnCountDownEnded += CountPomodoro;
+                    _nextPomodoroState = PomodoroState.ShortRest;
+                    break;
+                case PomodoroState.Focus:
+                    _pomodoroState = PomodoroState.ShortRest;
+                    CreatePomodoro(PomodoroDuration.Durations[PomodoroState.ShortRest]);
+                    _nextPomodoroState = PomodoroState.Focus;
+                    break;
+                case PomodoroState.ShortRest:
+                    _pomodoroState = PomodoroState.Focus;
+                    CreatePomodoro(PomodoroDuration.Durations[PomodoroState.Focus]);
+                    timer.OnCountDownEnded += CountPomodoro;
+                    _nextPomodoroState = PomodoroState.ShortRest;
+                    break;
+                case PomodoroState.LongRest:
+                    _pomodoroState = PomodoroState.Focus;
+                    CreatePomodoro(PomodoroDuration.Durations[PomodoroState.Focus]);
+                    timer.OnCountDownEnded += CountPomodoro;
+                    _nextPomodoroState = PomodoroState.ShortRest;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
 
-		private void CountPomodoro(object? sender, EventArgs e) {
+        private void CreatePomodoro(TimeSpan time) {
+            timer = new PomodoroTimer();
+            timer.SetTime(time);
+            timer.Start();
+            StartButton.IsEnabled = false;
+            timer.OnTick += (o, args) => TimeTextBlock.Text = args.TimeToEnd.ToString("c");
+            timer.OnCountDownEnded += (o, args) => { StartButton.IsEnabled = true; };
+            timer.OnCountDownEnded += (o, args) => { TimeTextBlock.Text = PomodoroDuration.Durations[_nextPomodoroState].ToString("c"); };
+        }
+
+
+        private void CountPomodoro(object? sender, EventArgs e) {
 			PomodoroNumber += 1;
 		}
 
