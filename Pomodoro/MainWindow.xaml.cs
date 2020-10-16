@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using Pomodoro;
 using Pomodoro.Annotations;
 
@@ -28,7 +31,6 @@ namespace Cerebri {
 			InitializeComponent();
 			this.DataContext = this;
 		}
-
 
 		private void StartButton_OnClick(object sender, RoutedEventArgs e) {
 			switch (_timer.TimerState) {
@@ -82,6 +84,11 @@ namespace Cerebri {
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
+		private void AddTaskButton_OnClick(object sender, RoutedEventArgs e) {
+			List<Tasks> items = new List<Tasks>();
+			items.Add(new Tasks() {Task = new TextBlock() {Text = TaskEntry.Text}, Checkbox = new CheckBox(), DeleteButton = new Button()});
+			TasksListView.ItemsSource = items;
+
+		}
 	}
 }
-// zienia sie w zaleznosci od tego czy w klaie pomodorotimer bylo wywolane start czy stop i na podstawie tego enuma bedzie sie zmienial przycisk i jego logika
