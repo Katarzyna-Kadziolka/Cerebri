@@ -2,14 +2,17 @@
 
 namespace Pomodoro {
     public class PomodoroStateManager {
-        public int PomodoroCount { get; private set; }
+        public int PomodoroCount { get; private set; } = 0;
         public PomodoroState CurrentState { get; private set; }
 
         public void GoToNextState() {
             if (CurrentState == PomodoroState.LongRest) {
-                PomodoroCount = 1;
+                PomodoroCount = 0;
             }
             CurrentState = GetNextState();
+            if (CurrentState == PomodoroState.Focus) {
+                PomodoroCount++;
+            }
         }
 
         public PomodoroState GetNextState() {
@@ -35,6 +38,7 @@ namespace Pomodoro {
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             return nextPomodoroState;
         }
     }

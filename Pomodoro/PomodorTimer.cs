@@ -8,6 +8,7 @@ using Cerebri;
 
 namespace Pomodoro {
     public class PomodoroTimer {
+        public TimerState TimerState { get; private set; } = TimerState.Waiting;
         public PomodoroTimer() {
             CreateDispatcher();
         }
@@ -20,10 +21,13 @@ namespace Pomodoro {
 
         public void Start() {
             _timer.Start();
+            TimerState = TimerState.Ongoing;
+            DispatcherTick(this, EventArgs.Empty);
         }
 
         public void Stop() {
             _timer.Stop();
+            TimerState = TimerState.Paused;
         }
 
         public void SetTime(TimeSpan time) {
@@ -38,7 +42,8 @@ namespace Pomodoro {
         private void DispatcherTick(object sender, EventArgs e) {
             OnTick?.Invoke(this, new TickEventArgs() { TimeToEnd = _time });
             if (_time == TimeSpan.Zero) {
-                Stop();
+                _timer.Stop();
+                TimerState = TimerState.Waiting;
                 OnCountDownEnded?.Invoke(this, EventArgs.Empty);
                 return;
             }

@@ -16,11 +16,7 @@
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 
-				<TextBlock x:Name="TimeTextBlock" HorizontalAlignment="Center" FontSize="60" Grid.Row="0" >
-                    <TextBlock.Text>
-                        <Binding StringFormat="00:{0}:00" Path="Time"></Binding>
-                    </TextBlock.Text>
-                </TextBlock>
+				<TextBlock x:Name="TimeTextBlock" Text="00:25:00" HorizontalAlignment="Center" FontSize="60" Grid.Row="0" />
 
                     
 				<TextBlock x:Name="PomodoroNumberTextBlock" HorizontalAlignment="Center" Grid.Row="1">
@@ -32,6 +28,20 @@
 
 			<!-- Tasks -->
 			<!-- TODO -->
+
+			<ListView Name="TasksListView">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<DockPanel>
+							<TextBlock/>
+							<CheckBox/>
+							<Button Content="❌"/>
+						</DockPanel>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+
+			</ListView>
+
 
 			<!-- AddTasks -->
 			<Grid>
@@ -53,7 +63,7 @@
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
 
-				<Button x:Name="StartButton" Click="CreateCountDown" Content="Start!" Grid.Column="1" FontSize="20" Margin="0 30 " />
+				<Button x:Name="StartButton" Click="StartButton_OnClick" Content="Start!" Grid.Column="1" FontSize="20" Margin="0 30 " />
 			</Grid>
 		</StackPanel>
 	</Border>
