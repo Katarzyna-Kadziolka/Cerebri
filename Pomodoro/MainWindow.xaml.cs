@@ -92,5 +92,8 @@ namespace Cerebri {
 			TasksListView.ItemsSource = items;
 
 		}
+
+		
+
 	}
 }

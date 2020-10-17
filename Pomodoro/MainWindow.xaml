@@ -36,7 +36,7 @@
 						<DockPanel>
 							<TextBlock Text="{Binding Path=Description}"/>
 							<CheckBox/>
-							<Button Content = "❌" />
+							<Button Command="{Binding ElementName=TasksListView}" Content = "❌"/>
 						</DockPanel>
 					</DataTemplate>
 				</ListView.ItemTemplate>
