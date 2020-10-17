@@ -23,6 +23,7 @@ namespace Cerebri {
 			}
 		}
 
+		private List<string> _tasksList = new List<string>();
 		private PomodoroTimer _timer = new PomodoroTimer();
 		private int _pomodoroNumber = 1;
 		private PomodoroStateManager _stateManager = new PomodoroStateManager();
@@ -86,7 +87,8 @@ namespace Cerebri {
 
 		private void AddTaskButton_OnClick(object sender, RoutedEventArgs e) {
 			List<Tasks> items = new List<Tasks>();
-			items.Add(new Tasks() {Task = new TextBlock() {Text = TaskEntry.Text}, Checkbox = new CheckBox(), DeleteButton = new Button()});
+			items.Add(new Tasks() { Description = TaskEntry.Text});
+			_tasksList.Add(TaskEntry.Text);
 			TasksListView.ItemsSource = items;
 
 		}

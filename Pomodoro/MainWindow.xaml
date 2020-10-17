@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Cerebri"
+        xmlns:pomodoro="clr-namespace:Pomodoro"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
@@ -31,9 +32,9 @@
 
 			<ListView Name="TasksListView">
 				<ListView.ItemTemplate>
-					<DataTemplate>
+					<DataTemplate DataType="pomodoro:Tasks">
 						<DockPanel>
-							<TextBlock Text="{Binding}"/>
+							<TextBlock Text="{Binding Path=Description}"/>
 							<CheckBox/>
 							<Button Content = "❌" />
 						</DockPanel>
