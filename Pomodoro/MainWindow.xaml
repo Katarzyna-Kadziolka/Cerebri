@@ -32,11 +32,11 @@
 
 			<ListView Name="TasksListView">
 				<ListView.ItemTemplate>
-					<DataTemplate DataType="pomodoro:Tasks">
-						<DockPanel>
-							<TextBlock Text="{Binding Path=Description}"/>
-							<CheckBox/>
-							<Button Command="{Binding ElementName=TasksListView}" Content = "❌"/>
+					<DataTemplate DataType="pomodoro:ToDoTask">
+						<DockPanel LastChildFill="True">
+							<TextBlock Text="{Binding Path=Description}" DockPanel.Dock="Left"/>
+							<CheckBox DockPanel.Dock="Right"/>
+							<Button Click="RemoveButton_OnClick"  Content = "❌" DockPanel.Dock="Right"/>
 						</DockPanel>
 					</DataTemplate>
 				</ListView.ItemTemplate>

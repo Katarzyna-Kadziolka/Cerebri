@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -23,14 +24,16 @@ namespace Cerebri {
 			}
 		}
 
-		private List<string> _tasksList = new List<string>();
+		private ObservableCollection<ToDoTask> _tasksList = new ObservableCollection<ToDoTask>();
 		private PomodoroTimer _timer = new PomodoroTimer();
 		private int _pomodoroNumber = 1;
 		private PomodoroStateManager _stateManager = new PomodoroStateManager();
 
+
 		public MainWindow() {
 			InitializeComponent();
 			this.DataContext = this;
+            TasksListView.ItemsSource = _tasksList;
 		}
 
 		private void StartButton_OnClick(object sender, RoutedEventArgs e) {
@@ -86,14 +89,14 @@ namespace Cerebri {
 		}
 
 		private void AddTaskButton_OnClick(object sender, RoutedEventArgs e) {
-			List<Tasks> items = new List<Tasks>();
-			items.Add(new Tasks() { Description = TaskEntry.Text});
-			_tasksList.Add(TaskEntry.Text);
-			TasksListView.ItemsSource = items;
-
+			_tasksList.Add(new ToDoTask() { Description = TaskEntry.Text});
 		}
 
-		
 
-	}
+        private void RemoveButton_OnClick(object sender, RoutedEventArgs e) {
+            Button button = (Button)sender;
+            _tasksList.Remove((ToDoTask)button.DataContext);
+
+        }
+    }
 }

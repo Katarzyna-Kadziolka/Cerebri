@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace Pomodoro
 {
-	public class Tasks {
+	public class ToDoTask {
 		public string Description { get; set; }
 	}
 }
