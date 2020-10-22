@@ -25,17 +25,19 @@
                         <Binding StringFormat="Sesja: {0}/4" Path="PomodoroNumber"></Binding>
 					</TextBlock.Text>
 				</TextBlock>
+
+				<ProgressBar Minimum="0" Maximum="100" Value="{Binding Path=}"  Grid.Row="2"/>
 			</Grid>
 
 			<!-- Tasks -->
 			<!-- TODO -->
 
-			<ListView Name="TasksListView">
+			<ListView Name="TasksListView" Background="Transparent" BorderThickness="0">
 				<ListView.ItemTemplate>
 					<DataTemplate DataType="pomodoro:ToDoTask">
-						<DockPanel LastChildFill="True">
-							<TextBlock Text="{Binding Path=Description}" DockPanel.Dock="Left"/>
-							<CheckBox DockPanel.Dock="Right"/>
+						<DockPanel>
+							<TextBlock Text="{Binding Path=Description}" Width="700"/>
+							<CheckBox Name="taskCheckbox" IsChecked="{Binding Path=CheckboxChecked}"  Width="25" />
 							<Button Click="RemoveButton_OnClick"  Content = "❌" DockPanel.Dock="Right"/>
 						</DockPanel>
 					</DataTemplate>

@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Pomodoro;
 using Pomodoro.Annotations;
+using System.Linq;
 
 namespace Cerebri {
 	/// <summary>
@@ -24,16 +25,27 @@ namespace Cerebri {
 			}
 		}
 
+        public int Progress {
+            get { return _progress;  }
+            set {
+				if (value != _progress) {
+                    _progress = value;
+                }
+            }
+        }
+
 		private ObservableCollection<ToDoTask> _tasksList = new ObservableCollection<ToDoTask>();
+		private ObservableCollection<ToDoTask> _checkboxList = new ObservableCollection<ToDoTask>();
 		private PomodoroTimer _timer = new PomodoroTimer();
 		private int _pomodoroNumber = 1;
 		private PomodoroStateManager _stateManager = new PomodoroStateManager();
-
-
+        private int _progress = 0;
+     
 		public MainWindow() {
 			InitializeComponent();
 			this.DataContext = this;
             TasksListView.ItemsSource = _tasksList;
+			
 		}
 
 		private void StartButton_OnClick(object sender, RoutedEventArgs e) {
@@ -90,13 +102,21 @@ namespace Cerebri {
 
 		private void AddTaskButton_OnClick(object sender, RoutedEventArgs e) {
 			_tasksList.Add(new ToDoTask() { Description = TaskEntry.Text});
+			_checkboxList.Add(new ToDoTask() { CheckboxChecked = false});
+			TaskEntry.Text = string.Empty;
 		}
 
 
         private void RemoveButton_OnClick(object sender, RoutedEventArgs e) {
             Button button = (Button)sender;
             _tasksList.Remove((ToDoTask)button.DataContext);
+            _checkboxList.Remove((ToDoTask) button.DataContext);
+        }
 
+        private int CountProgress() {
+            int taskNumber = _tasksList.Count;
+            int checkedBoxes = _checkboxList.Count(task => true);
+            return checkedBoxes;
         }
     }
 }
