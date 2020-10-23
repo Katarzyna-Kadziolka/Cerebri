@@ -7,6 +7,6 @@ namespace Pomodoro
 {
 	public class ToDoTask {
 		public string Description { get; set; }
-		public bool CheckboxChecked { get; set; }
+		public bool IsDone { get; set; }
 	}
 }

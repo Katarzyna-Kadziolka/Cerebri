@@ -15,6 +15,7 @@
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
+					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 
 				<TextBlock x:Name="TimeTextBlock" Text="00:25:00" HorizontalAlignment="Center" FontSize="60" Grid.Row="0" />
@@ -26,7 +27,7 @@
 					</TextBlock.Text>
 				</TextBlock>
 
-				<ProgressBar Minimum="0" Maximum="100" Value="{Binding Path=}"  Grid.Row="2"/>
+				<ProgressBar Name="ProgressBar" Minimum="0" Maximum="1"  Height="10" Grid.Row="2" Margin="12"/>
 			</Grid>
 
 			<!-- Tasks -->
@@ -37,7 +38,7 @@
 					<DataTemplate DataType="pomodoro:ToDoTask">
 						<DockPanel>
 							<TextBlock Text="{Binding Path=Description}" Width="700"/>
-							<CheckBox Name="taskCheckbox" IsChecked="{Binding Path=CheckboxChecked}"  Width="25" />
+							<CheckBox Name="taskCheckbox" IsChecked="{Binding Path=IsDone}" Click="TaskCheckbox_OnClick"  Width="25" />
 							<Button Click="RemoveButton_OnClick"  Content = "❌" DockPanel.Dock="Right"/>
 						</DockPanel>
 					</DataTemplate>
