@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Pomodoro;
 using Pomodoro.Annotations;
 using System.Linq;
+using System.Windows.Media;
 
 namespace Cerebri {
 	/// <summary>
@@ -25,26 +24,16 @@ namespace Cerebri {
 			}
 		}
 
-        public int Progress {
-            get { return _progress;  }
-            set {
-				if (value != _progress) {
-                    _progress = value;
-                }
-            }
-        }
 
-		private ObservableCollection<ToDoTask> _tasksList = new ObservableCollection<ToDoTask>();
+		private readonly ObservableCollection<ToDoTask> _tasksList = new ObservableCollection<ToDoTask>();
 		private PomodoroTimer _timer = new PomodoroTimer();
 		private int _pomodoroNumber = 1;
-		private PomodoroStateManager _stateManager = new PomodoroStateManager();
-        private int _progress = 0;
-     
+		private readonly PomodoroStateManager _stateManager = new PomodoroStateManager();
+
 		public MainWindow() {
 			InitializeComponent();
 			this.DataContext = this;
-            TasksListView.ItemsSource = _tasksList;
-			
+			TasksListView.ItemsSource = _tasksList;
 		}
 
 		private void StartButton_OnClick(object sender, RoutedEventArgs e) {
@@ -73,7 +62,6 @@ namespace Cerebri {
 		private void StartTimer() {
 			StartButton.Content = "Pause";
 			_timer.Start();
-
 		}
 
 		private void PauseTimer() {
@@ -90,6 +78,7 @@ namespace Cerebri {
 			_timer.OnCountDownEnded += (o, args) => {
 				TimeTextBlock.Text = PomodoroDuration.Durations[_stateManager.GetNextState()].ToString("c");
 			};
+			_timer.OnCountDownEnded += (o, args) => PlaySound();
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -100,25 +89,31 @@ namespace Cerebri {
 		}
 
 		private void AddTaskButton_OnClick(object sender, RoutedEventArgs e) {
-			_tasksList.Add(new ToDoTask() { Description = TaskEntry.Text});
+			_tasksList.Add(new ToDoTask() {Description = TaskEntry.Text});
 			TaskEntry.Text = string.Empty;
 		}
 
 
-        private void RemoveButton_OnClick(object sender, RoutedEventArgs e) {
-            Button button = (Button)sender;
-            _tasksList.Remove((ToDoTask)button.DataContext);
-        }
+		private void RemoveButton_OnClick(object sender, RoutedEventArgs e) {
+			Button button = (Button) sender;
+			_tasksList.Remove((ToDoTask) button.DataContext);
+		}
 
-        private double CountProgress() {
-            int taskNumber = _tasksList.Count;
-            int checkedBoxes = _tasksList.Count(task => task.IsDone);
-            double progress = (double) checkedBoxes / taskNumber;
-            return progress;
-        }
+		private double CountProgress() {
+			int taskNumber = _tasksList.Count;
+			int checkedBoxes = _tasksList.Count(task => task.IsDone);
+			double progress = (double) checkedBoxes / taskNumber;
+			return progress;
+		}
 
-        private void TaskCheckbox_OnClick(object sender, RoutedEventArgs e) {
-	        ProgressBar.Value = CountProgress();
-        }
+		private void TaskCheckbox_OnClick(object sender, RoutedEventArgs e) {
+			ProgressBar.Value = CountProgress();
+		}
+
+		private void PlaySound() {
+			MediaPlayer mp = new MediaPlayer();
+			mp.Open(new Uri("assets\\endingsound.wav", UriKind.Relative));
+			mp.Play();
+		}
 	}
 }
